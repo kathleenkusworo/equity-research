@@ -7,13 +7,14 @@ import numpy as np
 from collections import OrderedDict
 import math
 
-df = pd.read_csv('all_closing_prices_mom.csv').dropna(axis=1, how='any')
+df = pd.read_csv('all_closing_prices_2016_2017.csv').dropna(axis=1, how='any')
 
 dates = list(df['date'])
 all_returns = OrderedDict([])
-year_ago = 253
+year_ago = 126
 month_ago = 21
-
+N = len(df.columns) - 1
+T = (len(df) - year_ago)
 all_returns['date'] = dates[year_ago:]
 
 for (key, value) in df.iteritems():
@@ -38,7 +39,7 @@ x_bar['date'] = dates[year_ago:]
 x_bar['x_bar'] = []
 for (key,value) in all_returns_df.iterrows():
     returns = [float(x) for x in list(value)[1:]]
-    x_bar['x_bar'].append(sum(returns)/len(returns))
+    x_bar['x_bar'].append(sum(returns)/N)
 
 output = 'x_bar_mom.csv'
 x_bar_df = pd.DataFrame(x_bar)
@@ -54,7 +55,7 @@ for (i, (key,value)) in enumerate(all_returns_df.iterrows()):
     cur_xbar = xbar[i]
     xraw = list(value)[1:]
     xraw_min_xbar = [(math.pow(float(xr) - cur_xbar, 2)) for xr in xraw]
-    stdev['stdev'].append(math.sqrt(sum(xraw_min_xbar)/(len(xraw) - 1)))
+    stdev['stdev'].append(math.sqrt(sum(xraw_min_xbar)/(N - 1)))
 
 # normalized factor exposures
 xn = OrderedDict([])

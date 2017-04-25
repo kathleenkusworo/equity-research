@@ -11,7 +11,7 @@ all_closing_prices = pd.read_csv('all_closing_prices.csv').dropna(axis=1, how='a
 all_volumes = pd.read_csv('all_volumes.csv').dropna(axis=1, how='any')
 sp500_china = pd.read_csv('sp500_china.csv')
 # print(sp500_china[sp500_china['Date'] == '2014'].index)
-
+# print(len(all_closing_prices.columns))
 all_returns = OrderedDict([])
 all_means = OrderedDict([])
 all_stdev = OrderedDict([])
