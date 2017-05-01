@@ -11,12 +11,14 @@ df = pd.read_csv('all_closing_prices_2016_2017.csv').dropna(axis=1, how='any')
 
 dates = list(df['date'])
 all_returns = OrderedDict([])
+daily_returns = OrderedDict([])
+
 year_ago = 126
 month_ago = 21
 N = len(df.columns) - 1
 T = (len(df) - year_ago)
 all_returns['date'] = dates[year_ago:]
-
+daily_returns['date'] = dates[year_ago:]
 for (key, value) in df.iteritems():
     if (key == 'date'):
         continue
@@ -24,15 +26,23 @@ for (key, value) in df.iteritems():
     prices = list(value)
     if key not in all_returns:
         all_returns[key] = []
+        daily_returns[key] = []
         
     for i in range(year_ago, len(prices)):
         all_returns[key].append(math.log(float(prices[i - month_ago]) / float(prices[i - year_ago])))
+        daily_returns[key].append(math.log(float(prices[i]) / float(prices[i - 1])))
 
 output = 'all_returns_mom.csv'
 all_returns_df = pd.DataFrame(all_returns)
 all_returns_df.to_csv(output)
 print("Equity returns written to " + output)
 
+output = 'daily_returns_mom.csv'
+daily_returns_df = pd.DataFrame(daily_returns)
+daily_returns_df.to_csv(output)                                  
+                                  
+                                  
+                                  
 # compute raw factor exposures
 x_bar = OrderedDict([])
 x_bar['date'] = dates[year_ago:]
